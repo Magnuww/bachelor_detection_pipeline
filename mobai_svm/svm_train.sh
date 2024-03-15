@@ -1,5 +1,5 @@
 bonaFideFeatures="../datasets/unibo/runnable/Feature_Bonafide/"
-morphedAttackFeatures="../datasets/mordiff/runnable/"
+morphedAttackFeatures="../datasets/mordiff/runnable/Feature_Morphed/"
 
 modelOutput="../models/mordiff_morph_2/"
 
