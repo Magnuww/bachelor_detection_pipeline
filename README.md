@@ -16,6 +16,7 @@ python merge_feature_dataset.py \
 
 Step 2:
 copy the data_full folder from the unibo dataset into the new dataset 
+or create empty files with the same name
 
 Step 3: 
 
