@@ -1,32 +1,105 @@
 
-# How to train with the mobai svm
+# Mobai svm
+## How to train with a new dataset 
 Step 1: 
 
-run merge_feature_dataset.py 
-![merge_feature_dataset usage](assets/merge_feature_dataset_guide.png)
+Run create_dataset.py in mobai_dataset_utils:
 
-Example usage:
+
+Example:
 ```bash
-python merge_feature_dataset.py \
-  --original datasets/unibo/runnable/Feature_Morphed \
-  --new datasets/mordiff/full_morphed_features/Feature_Morphed \
-  --output datasets/mordiff/runnable
+python create_dataset.py \
+  --original datasets/unibo/ \
+  --new datasets/mordiff/ \
+  --output datasets/mordiff_runnable/
 
 ```
 
 Step 2:
-copy the data_full folder from the unibo dataset into the new dataset 
-or create empty files with the same name
 
-Step 3: 
+Run the mobai svm with the dataset created in previous step. 
 
-Remove all the .DS_store files
+Usage:
+```bash
+python svm_training_pipeline.py --bonaFideFeatures BONAFIDEFEATURES \
+                                --morphedAttackFeatures MORPHEDATTACKFEATURES \
+                                --modelOutput MODELOUTPUT \
+```
 
-Step 4: 
 
-If on IDUN run the slurm script, remember to add email in the email field.
 
-![Email field](assets/email_slurm.png)
 
-If not use the bash script svm_train.sh
+If assert errors occur try removing all the .DS_store files.
+
+You can do this by moving to the desired folder and running:
+```bash
+trash **/.DS_store
+```
+
+
+## How to test with another dataset 
+
+Step 1: 
+
+Copy the model folder, since the results will be overwritten.
+
+Step 2:
+
+Example usage:
+```bash
+
+python3 svm_testing_pipeline.py --bonaFideFeatures unibo/Feature_Bonafide \
+	--morphedAttackFeatures  unibo/Feature_Morphed \
+	--modelOutput mordiff_runnable/model
+```
+
+
+## How to merge/combine datasets
+
+<!-- These instructions are for merging 2 or more datasets, whilst keeping the size -->
+<!-- proportional.  -->
+
+Step 1:
+
+If the datasets does not have any probe images in it run create_dataset.py 
+from mobai_dataset_utils with unibo dataset as original.
+
+Example:
+```bash
+python create_dataset.py \
+  --original datasets/unibo/ \
+  --new datasets/mordiff/ \
+  --output datasets/mordiff_runnable/
+
+```
+
+Do this for each dataset that is gonna be merged/combined.
+
+
+Step 2:
+
+
+To merge the datasets whilst keeping the size proportional run. 
+
+Run mege_dataset.py in mobai_dataset_utils
+
+
+Example usage: 
+```bash
+python merge_dataset.py --datasets UNIBO MORDIFF MIPGAN --ouput MERGED
+```
+
+To combine the datasets fully 
+
+Run combine_dataset.py in mobai_dataset_utils
+
+Example usage:
+
+```bash
+python combine_dataset.py --datasets UNIBO MORDIFF MIPGAN --ouput COMBINED
+```
+
+
+
+
 
