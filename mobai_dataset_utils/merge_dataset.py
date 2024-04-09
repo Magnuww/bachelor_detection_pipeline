@@ -2,6 +2,7 @@ import os
 from utils import build_traversal_array
 from utils import create_data_full
 from utils import symlink_dataset
+from utils import create_full_mobai_traversal_array
 from argparse import ArgumentParser
 
 import random
@@ -69,23 +70,10 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
             os.symlink(source, destination)
 
 
-def create_traversal_array():
-    subdir1 = ["Feature_Bonafide", "Feature_Morphed"]
-    subdir2 = ["AGE", "FERET", "FRGC", "TUF"]
-    subdir3 = ["1_training_set", "2_dev_set", "3_test_set"]
-    subdir4 = ["1_male_source", "2_female_source"]
-
-    subdirs = [subdir1, subdir2, subdir3, subdir4]
-
-    current_dir = ""
-    traversal_array = build_traversal_array(current_dir, subdirs)
-    return traversal_array
-
-
 if __name__ == "__main__":
     datasets, output = get_arguments()
 
-    traversal_array = create_traversal_array()
+    traversal_array = create_full_mobai_traversal_array()
 
     probability_for_each_dataset = 1 / len(datasets)
     for dataset in datasets:

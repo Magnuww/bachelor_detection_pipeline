@@ -1,6 +1,19 @@
 import os
 
 
+def create_full_mobai_traversal_array():
+    subdir1 = ["Feature_Bonafide", "Feature_Morphed"]
+    subdir2 = ["AGE", "FERET", "FRGC", "TUF"]
+    subdir3 = ["1_training_set", "2_dev_set", "3_test_set"]
+    subdir4 = ["1_male_source", "2_female_source"]
+
+    subdirs = [subdir1, subdir2, subdir3, subdir4]
+
+    current_dir = ""
+    traversal_array = build_traversal_array(current_dir, subdirs)
+    return traversal_array
+
+
 def build_traversal_array(current_dir, subdirs):
     if len(subdirs) == 0:
         return [current_dir]
