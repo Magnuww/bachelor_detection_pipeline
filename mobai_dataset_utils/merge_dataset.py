@@ -1,7 +1,5 @@
 import os
-from utils import build_traversal_array
 from utils import create_data_full
-from utils import symlink_dataset
 from utils import create_full_mobai_traversal_array
 from argparse import ArgumentParser
 
