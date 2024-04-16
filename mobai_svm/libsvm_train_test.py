@@ -24,6 +24,16 @@ def calc_APCER_BPCER(p_vals, labels, thres=0.5):
     return apcer, bpcer
 
 
+def get_eer(apcer, bpcer):
+    assert len(apcer) == len(bpcer)
+    apcer = np.array(apcer)
+    bpcer = np.array(bpcer)
+
+    eer_index = np.argmin(np.abs(apcer - bpcer))
+
+    return apcer[eer_index], bpcer[eer_index]
+
+
 def plot_APCER_BPCER(
     p_vals, labels, step=0.01, logscale=True, label="", plot_flag=True
 ):
@@ -35,6 +45,9 @@ def plot_APCER_BPCER(
         apcer.append(apcer_i)
         bpcer.append(bpcer_i)
         thres.append(thres_i)
+
+    eer_apcer, eer_bpcer = get_eer(apcer, bpcer)
+
     if plot_flag:
         fig, axs = plt.subplots()
         if logscale:
@@ -46,7 +59,7 @@ def plot_APCER_BPCER(
         axs.set_ylabel("BPCER")
         return apcer, bpcer, thres, [fig, axs]
 
-    return apcer, bpcer, thres
+    return apcer, bpcer, thres, eer_apcer, eer_bpcer
 
 
 def tune_svm(
@@ -220,7 +233,7 @@ def tune_svm(
         print("\tAccuracy: ", acc_i)
 
         # Compute APCR and BPCR values:
-        apcr, bpcr, _ = plot_APCER_BPCER(
+        apcr, bpcr, _, _, _ = plot_APCER_BPCER(
             p_vals, np.array(val_y), step=0.01, plot_flag=False
         )
         results["APCR"].append(apcr)
@@ -387,7 +400,7 @@ def test_svm(
     fig, axs = plt.subplots(2, 4, figsize=(30, 10))
 
     # Plot the apcr/bpcr results for entire test dataset:
-    apcr, bpcr, _ = plot_APCER_BPCER(
+    apcr, bpcr, _, eer_apcer, eer_bpcer = plot_APCER_BPCER(
         p_vals, np.array(test_y), step=0.01, plot_flag=False
     )
     indxs_10 = np.where(
@@ -404,7 +417,7 @@ def test_svm(
         [0, ten_perc[-1][0]],
         [ten_perc[0][0], ten_perc[0][0]],
         c="black",
-        label=f"BPCR: {np.round(ten_perc[0][0]*100, 2)}% APCR: {np.round(ten_perc[-1][0]*100, 2)}%",
+        label=f"BPCR: {np.round(ten_perc[0][0]*100, 2)}% APCR: {np.round(ten_perc[-1][0]*100, 2)}% eer_APCER: {np.round(eer_apcer*100, 2)}% ",
     )
     axs[0, 0].loglog(
         [ten_perc[-1][0], ten_perc[-1][0]],
@@ -417,7 +430,7 @@ def test_svm(
         [one_perc[0][0], one_perc[0][0]],
         c="black",
         ls="--",
-        label=f"BPCR: {np.round(one_perc[0][0]*100, 2)}% APCR: {np.round(one_perc[-1][0]*100, 2)}%",
+        label=f"BPCR: {np.round(one_perc[0][0]*100, 2)}% APCR: {np.round(one_perc[-1][0]*100, 2)}% eer_BPCER: {np.round(eer_bpcer*100, 2)}% ",
     )
     axs[0, 0].loglog(
         [one_perc[-1][0], one_perc[-1][0]],
@@ -490,10 +503,10 @@ def test_svm(
     acc_female = 1 - np.abs(
         np.array(y_test_female) - p_vals_female.mean(0).round()
     ).sum() / len(y_test_female)
-    apcr_male, bpcr_male, _ = plot_APCER_BPCER(
+    apcr_male, bpcr_male, _, _, _ = plot_APCER_BPCER(
         p_vals_male, np.array(y_test_male), step=0.01, plot_flag=False
     )
-    apcr_female, bpcr_female, _ = plot_APCER_BPCER(
+    apcr_female, bpcr_female, _, _, _ = plot_APCER_BPCER(
         p_vals_female, np.array(y_test_female), step=0.01, plot_flag=False
     )
     axs[1, 0].loglog(apcr_male, bpcr_male, label="male")
@@ -512,7 +525,7 @@ def test_svm(
         acc_i = 1 - np.abs(np.array(test_i) - p_vals_i.mean(0).round()).sum() / len(
             test_i
         )
-        apcr_i, bpcr_i, _ = plot_APCER_BPCER(
+        apcr_i, bpcr_i, _, _, _ = plot_APCER_BPCER(
             p_vals_i, np.array(test_i), step=0.01, label=ds, plot_flag=False
         )
         axs[1, 1].loglog(apcr_i, bpcr_i, label=f"{ds} - {np.round(acc_i*100, 2)}%")
