@@ -9,24 +9,45 @@ age_rename = re.compile(r'M_(\d+)_.*[M|F].*_(\d+)_.*_W0.*')
 feret_rename = re.compile(r'M_(\d+)_1_(\d+).*')
 frgc_rename = re.compile(r'M_(\d+)d.*_(\d+)d.*')
 
-def format_name(root : str, file: str) -> str :
+
+mipgan_rename = re.compile(r'(\d+).*-vs-(\d+).*')
+
+
+mordiff_age_feret_rename = re.compile(r'_(\d+)_.+_(\d+)_.*')
+mordiff_tuf_frgc_rename = re.compile(r'_(\d+).*_(\d+).*')
+
+
+def format_name(root : str, file: str, morphalg : str) -> str :
     path = root.split("/")
     argspassed = len(args.out.split("/"))
     database = path[argspassed]
 
-
-
     match = "" 
+    if morphalg == None:
+        raise ValueError("No morphalg passed")
+    if morphalg.lower() == "mipgan":
+        match = mipgan_rename.match(file)
+
+    elif morphalg.lower() == "mordiff":
+        print(database)
+        match database:
+            case "FRGC" | "TUF":
+                print(file)
+                match = mordiff_tuf_frgc_rename.match(file)
+            case "AGE" | "FERET":
+                print(file)
+                match = mordiff_age_feret_rename.match(file)
     # print(database)
-    match database:
-        case "FERET":
-            match = feret_rename.match(file)
-        case "FRGC":
-            match = frgc_rename.match(file)
-        case "TUF":
-            match = tuf_rename.match(file)
-        case "AGE":
-            match = age_rename.match(file)
+    elif morphalg.lower() == "ubo":
+        match database:
+            case "FERET":
+                match = feret_rename.match(file)
+            case "FRGC":
+                match = frgc_rename.match(file)
+            case "TUF":
+                match = tuf_rename.match(file)
+            case "AGE":
+                match = age_rename.match(file)
     if match == "":
         raise ValueError("No match found")
     # print(file)
@@ -36,7 +57,7 @@ def format_name(root : str, file: str) -> str :
     return new_name
 
 
-def traverse(path, out : str, rename=False):
+def traverse(path, out : str, rename=False, morphalg=None):
     for root, dirs, files in os.walk(path):
         #print(root, dirs, files)
         for file in files:
@@ -57,7 +78,7 @@ def traverse(path, out : str, rename=False):
                 #print(name)
 
                 if rename:
-                    name = format_name(root, file)
+                    name = format_name(root, file, morphalg)
                     # print(name)
                     # break
                 #print("outpath + name")
@@ -81,10 +102,11 @@ if __name__ == "__main__":
     parser.add_argument("--rename",
                         type=bool,
                         help="rename files")
+    parser.add_argument("--morphalg", type=str, help="morphing algorithm")
     args = parser.parse_args()
 
     if args.rename:
-        traverse(args.path, args.out, True)
+        traverse(args.path, args.out, True, morphalg=args.morphalg)
     else:
         traverse(args.path, args.out)
 
@@ -98,6 +120,7 @@ if __name__ == "__main__":
     #    with open(pathmorph, "r") as file:
     #        lines = file.readlines()
     #        for line in lines:
+    #
     #            img1, img2 = line.split()
     #            print(img1, img2)
     #            os.system(f"python3 morph_two_images.py --img1 {pathimages + img1} --img2 {pathimages + img2} --out {args.out}")
