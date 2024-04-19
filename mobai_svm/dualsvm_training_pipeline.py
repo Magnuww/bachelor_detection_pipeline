@@ -1,14 +1,15 @@
 from libsvm_train_test import train_svm, test_svm, tune_svm
 import argparse as ap
-import dual_test
+from dual_test import dual_test_svm, dual_tune_ratio
 
 parse = ap.ArgumentParser()
 
 parse.add_argument("--Mfeatures", type=str, help="Path to bonafide features folder.")
 parse.add_argument("--Ffeatures", type=str, help="Path to morphed features folder.")
 parse.add_argument("--Mname", type=str, help="Path to save mobaimodels.")
-parse.add_argument("--Fname", type=str, help="Path to save .")
-parse.add_argument("--Trainmodels", type=bool, help="Skip training mobai models.")
+parse.add_argument("--Fname", type=str, help="Path to save facemodel.")
+parse.add_argument("--Train_models", type=bool, help="Train models.")
+parse.add_argument("--Tune_ratio", type=bool, help="Tune ratio")
 
 args = parse.parse_args()
 
@@ -28,15 +29,20 @@ if __name__ == '__main__':
         strSavingModelFilePath = f'./PythonSVM/concatenate/model_{args.Mname}_os_{os_i}/'
         strSavingModelFilePath2 = f'./PythonSVM/concatenate/model_{args.Fname}_os_{os_i}/'
 
-        print("what" + str(args.Trainmodels))
-        if args.Trainmodels:
+        print("what" + str(args.Train_models))
+        if args.Train_models:
             # tune_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, "svm_tuning")
             train_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, 
                     strSavingModelFilePath, param_str=str_i, oversampled=os_i, feat_shapes=(49,512))
             print("Finished training movai svm")
             train_svm(args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, 
-                    strSavingModelFilePath2, param_str=str_i, oversampled=os_i, feat_shapes=(32,32))
+                    strSavingModelFilePath2, param_str=str_i, oversampled=os_i, feat_shapes=(1,1024))
             print("Done Training")
         print("testing models")
-        dual_test.dual_test_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, (49,512),
-             args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,(32,32))
+        tune_ratio = True if args.Tune_ratio else False
+        if tune_ratio:
+            dual_tune_ratio(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, (49,512),
+                args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,(32,32))
+        else:
+            dual_test_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, (49,512),
+                args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,(1,1024), ratio=0.6)

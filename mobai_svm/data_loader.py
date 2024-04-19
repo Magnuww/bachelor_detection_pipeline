@@ -20,6 +20,8 @@ class data_loader():
             self.construct_pipeline()
 
     def find_match(self,this,other):
+        print(f'DB1: {len(this)}')
+        print(f'DB2: {len(other)}')
         ##remove uneccesary info for the comparison
         thisunp = [[x[0].split("/")[-4:], x[1].split("/")[-4:]] for x in this]
         otherunp = [[x[0].split("/")[-4:], x[1].split("/")[-4:]] for x in other]
@@ -68,14 +70,14 @@ class data_loader():
 
                     if os.path.exists(probe_path1):
                         self.paths_morphed.append([probe_path1, morph_path])
-                    else: 
-                        print("missed")
+                    # else: 
+                        # print("missed")
 
                     if os.path.exists(probe_path2):    
-                        print("hit")
+                        # print("hit")
                         self.paths_morphed.append([probe_path2, morph_path])
-                    else:
-                        print("missed2")
+                    # else:
+                        # print("missed2")
 
         # print(self.paths_morphed)
         # Get bonafide paths

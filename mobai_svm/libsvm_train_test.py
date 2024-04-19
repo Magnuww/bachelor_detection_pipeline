@@ -10,8 +10,8 @@ import copy
 
 
 def calc_APCER_BPCER(p_vals, labels, thres=0.5):
-    print(p_vals.shape)
-    print(labels.shape)
+    # print(p_vals.shape)
+    # print(labels.shape)
     preds = p_vals.mean(0)
     preds = (preds >= thres).astype(int)
 
