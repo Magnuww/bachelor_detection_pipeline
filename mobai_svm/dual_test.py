@@ -5,6 +5,68 @@ from data_loader import data_loader
 from matplotlib import pyplot as plt
 from libsvm_train_test import plot_APCER_BPCER
 
+#this code is heavly based on the libsvm_train_test.py code made by Mobai
+
+def dual_train_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, param_str, oversampled, feat_shapes,
+                   strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,param_str2, oversampled2, feat_shapes2):
+    loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='1_training_set', feat_shape=feat_shapes)
+    loader2 = data_loader(strInputAttacksFeaturesFolders2, strInputBonafideFeaturesFolders2, flag='1_training_set', feat_shape=feat_shapes2)
+    match_morphed1, match_bonafide1, match_morphed2, match_bonafide2 = loader.match_cross_dataset(loader2)
+    loader.paths_morphed = match_morphed1
+    loader.paths_bonafide = match_bonafide1
+    loader2.paths_morphed = match_morphed2
+    loader2.paths_bonafide = match_bonafide2
+    train_svm_from_loader(loader, strSavingModelFilePath, param_str=param_str, oversampled=oversampled)
+    print("done training mobai svm")
+    train_svm_from_loader(loader2, strSavingModelFilePath2, param_str = param_str2, oversampled=oversampled2)
+    print("done training face svm")
+
+def train_svm_from_loader(data_loader, strSavingModelFilePath, param_str=None, oversampled=False) :
+    if not os.path.exists(strSavingModelFilePath):
+        os.makedirs(strSavingModelFilePath)
+
+    train_loader = data_loader
+    train_x, train_y, _ = train_loader.get_full_data(save_flag=False, load_from_file=False)      # x=[49xNx512], y=[N,]
+    # print(train_y)
+
+    # Check if the training should oversample the bonafide samples to ensure class balance.
+    #   Note: Currently only works for num BF < num Morph and num Morph < 2 * num BF. This would
+    #   be easy to change if the data is different...
+    if oversampled: 
+        np.random.seed(666)
+        bf_indxs = np.where(np.array(train_y) != 1)[0]
+        mp_indxs = np.where(np.array(train_y) == 1)[0]
+        print(bf_indxs)
+        print(mp_indxs)
+        print(f"len mp {len(mp_indxs)}")
+        print(f"len bf {len(bf_indxs)}")
+
+
+        # print(len(bf_indxs), len(mp_indxs))
+        bf_indxs = np.sort(np.concatenate([bf_indxs, np.random.choice(bf_indxs, len(mp_indxs) - len(bf_indxs), replace=False)]))
+        os_indxs = np.concatenate([bf_indxs, mp_indxs])
+        train_y = [train_y[ind] for ind in os_indxs]
+        train_x = [[train_x[i][j] for j in os_indxs] for i in range(len(train_x))]
+        assert np.sum(np.array(train_y) == 1) / len(train_y) == 0.5
+        print(f"Oversampled Size {len(train_y)}, num_morph {np.sum(np.array(train_y) == 1)}")
+    else: 
+        print(f"Data Size {len(train_y)}, num_morph {np.sum(np.array(train_y) == 1)}")
+
+    # Train the SVM model
+    for i, x_i in enumerate(train_x): 
+        if not os.path.exists(strSavingModelFilePath + 'model_' + str(i) + '.model'):
+            problem_i = svmutil.svm_problem(train_y, x_i)
+            if param_str is None:
+                param_i = svmutil.svm_parameter('-s 0 -t 0 -b 1')     
+            else: 
+                param_i = svmutil.svm_parameter(param_str)
+            model_i = svmutil.svm_train(problem_i, param_i)
+
+            # Save the model to a file
+            print(f'Finished Loop {i}')
+            svmutil.svm_save_model(strSavingModelFilePath + 'model_' + str(i) + '.model', model_i)
+
+
 def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, feat_shapes,
              strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2, ratio=0.5):
     test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='3_test_set', feat_shape=feat_shapes)
