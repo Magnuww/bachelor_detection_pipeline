@@ -1,8 +1,7 @@
-from utils import readAllFeatureVectorsFromFolder
+from utils import getUserArgs, readAllFeatureVectorsFromFolder
 import numpy as np
 import pickle
 from libsvm_train_test import test_svm
-from argparse import ArgumentParser
 
 
 def testSVMModel(
@@ -22,44 +21,9 @@ def testSVMModel(
     np.savetxt(strOutputFilePath, arrayOfResults, delimiter=",")
 
 
-def addTrailingSlash(path):
-    newPath = path
-    if newPath[-1] != "/":
-        newPath += "/"
-    return newPath
-
-
-def getInput():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "--bonaFideFeatures",
-        type=str,
-        help="Path to bonaFideFeatures",
-        default="./Feature_Bonafide/",
-    )
-    parser.add_argument(
-        "--morphedAttackFeatures",
-        type=str,
-        nargs="?",
-        help="Path to attack features",
-        default="./Feature_Morphed/",
-    )
-
-    parser.add_argument(
-        "--modelOutput", type=str, help="output for model", default="./model_save/"
-    )
-
-    args = parser.parse_args()
-
-    strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
-    strInputAttacksFeaturesFolders = addTrailingSlash(args.morphedAttackFeatures)
-    modelOutput = addTrailingSlash(args.modelOutput)
-    return strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput
-
-
 if __name__ == "__main__":
     strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput = (
-        getInput()
+        getUserArgs()
     )
 
     param_strs = [
