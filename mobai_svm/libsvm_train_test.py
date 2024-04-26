@@ -338,7 +338,11 @@ def test_svm(
     strSavingModelFilePath,
     load_preds=False,
     feat_shapes=(49, 512),
+    resultOutput=None,
 ):
+    if resultOutput is None:
+        resultOutput = strSavingModelFilePath
+
     test_loader = data_loader(
         strInputAttacksFeaturesFolders,
         strInputBonafideFeaturesFolders,
@@ -546,7 +550,11 @@ def test_svm(
     axs[1, 1].legend()
     axs[1, 2].legend()
 
-    fig.savefig(os.path.join(strSavingModelFilePath, "plot_metrics.png"))
+    figName = "plot_metrics"
+    figSavePath = os.path.join(strSavingModelFilePath, figName + ".png")
+    fig.savefig(figSavePath)
+
+    os.symlink(figSavePath, os.path.join(resultOutput, figName + ".png"))
 
     # save fig to pkl file
     # with open("plot_metrics.pkl", "wb") as f:

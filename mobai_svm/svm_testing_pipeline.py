@@ -1,7 +1,8 @@
-from utils import getUserArgs, readAllFeatureVectorsFromFolder
+from utils import addTrailingSlash, getUserArgs, readAllFeatureVectorsFromFolder
 import numpy as np
 import pickle
 from libsvm_train_test import test_svm
+from argparse import ArgumentParser
 
 
 def testSVMModel(
@@ -21,10 +22,24 @@ def testSVMModel(
     np.savetxt(strOutputFilePath, arrayOfResults, delimiter=",")
 
 
+def getResultOutputArg():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "--resultOutput",
+        type=str,
+        nargs="?",
+        help="Path to result output",
+        default=None,
+    )
+    return addTrailingSlash(parser.parse_args().resultOutput)
+
+
 if __name__ == "__main__":
     strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput = (
         getUserArgs()
     )
+
+    resultOutput = getResultOutputArg()
 
     param_strs = [
         ["-s 0 -t 0 -c 10 -b 1 -q", True],
@@ -43,4 +58,5 @@ if __name__ == "__main__":
             strInputBonafideFeaturesFolders,
             strInputAttacksFeaturesFolders,
             strSavingModelFilePath,
+            resultOutput=resultOutput,
         )
