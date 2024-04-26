@@ -81,6 +81,7 @@ def getUserArgs():
     parser.add_argument(
         "--bonaFideFeatures",
         type=str,
+        nargs="?",
         help="Path to bonaFideFeatures",
         default="./Feature_Bonafide/",
     )
@@ -93,7 +94,11 @@ def getUserArgs():
     )
 
     parser.add_argument(
-        "--modelOutput", type=str, help="output for model", default="./model_save/"
+        "--modelOutput",
+        type=str,
+        nargs="?",
+        help="output for model",
+        default="./model_save/",
     )
 
     args = parser.parse_args()
