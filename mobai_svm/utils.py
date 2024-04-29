@@ -1,10 +1,7 @@
 import os
-import shutil
 from os import listdir
 from os.path import isfile, join
-
-
-
+from argparse import ArgumentParser
 
 
 def getAllSubFolders(strInputFolder):
@@ -13,26 +10,30 @@ def getAllSubFolders(strInputFolder):
 
 
 def getAllFilesInFolder(strInputFolder, strFileExtension):
-    nListOfAllFiles= [f for f in os.listdir(strInputFolder) if f.endswith(strFileExtension)]
+    nListOfAllFiles = [
+        f for f in os.listdir(strInputFolder) if f.endswith(strFileExtension)
+    ]
     return nListOfAllFiles
 
 
 def getAllFilesRegardlessExtension(strInputFolder):
-    nListOfFiles = [f for f in listdir(strInputFolder) if isfile(join(strInputFolder, f))]
+    nListOfFiles = [
+        f for f in listdir(strInputFolder) if isfile(join(strInputFolder, f))
+    ]
     return nListOfFiles
 
 
-
 def getAllFiles_start_with_string(strInputFolder, strFileExtension):
-    nListOfAllFiles= [f for f in os.listdir(strInputFolder) if f.startswith(strFileExtension)]
+    nListOfAllFiles = [
+        f for f in os.listdir(strInputFolder) if f.startswith(strFileExtension)
+    ]
     return nListOfAllFiles
 
 
 def saveListValuesIntoFile(strSavingFilePath, nListOfValues):
-    with open(strSavingFilePath, 'w') as fileHandle:
+    with open(strSavingFilePath, "w") as fileHandle:
         for eachValue in nListOfValues:
-            fileHandle.write('%s\n' % eachValue)
-
+            fileHandle.write("%s\n" % eachValue)
 
 
 def readValuesFromFile(strInputFilePath, print_flag=True):
@@ -55,7 +56,9 @@ def readAllFeatureVectorsFromFolder(iSizeOfFeatureVector, strInputFolder):
         if strEachSubFolder == ".DS_Store":
             continue
         strEachSubFolderFullPath = os.path.join(strInputFolder, strEachSubFolder)
-        nListOfallFile_subFolder = getAllFilesRegardlessExtension(strEachSubFolderFullPath)
+        nListOfallFile_subFolder = getAllFilesRegardlessExtension(
+            strEachSubFolderFullPath
+        )
         for strEachFile in nListOfallFile_subFolder:
             if strEachFile == ".DS_Store":
                 continue
@@ -64,3 +67,43 @@ def readAllFeatureVectorsFromFolder(iSizeOfFeatureVector, strInputFolder):
             if len(nEachFeatureVector) == iSizeOfFeatureVector:
                 nListOfFeatureVectors.append(nEachFeatureVector)
     return nListOfFeatureVectors
+
+
+def addTrailingSlash(path):
+    newPath = path
+    if newPath[-1] != "/":
+        newPath += "/"
+    return newPath
+
+
+def getUserArgs():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "--bonaFideFeatures",
+        type=str,
+        nargs="?",
+        help="Path to bonaFideFeatures",
+        default="./Feature_Bonafide/",
+    )
+    parser.add_argument(
+        "--morphedAttackFeatures",
+        type=str,
+        nargs="?",
+        help="Path to attack features",
+        default="./Feature_Morphed/",
+    )
+
+    parser.add_argument(
+        "--modelOutput",
+        type=str,
+        nargs="?",
+        help="output for model",
+        default="./model_save/",
+    )
+
+    args = parser.parse_args()
+
+    strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
+    strInputAttacksFeaturesFolders = addTrailingSlash(args.morphedAttackFeatures)
+    modelOutput = addTrailingSlash(args.modelOutput)
+    return strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput
