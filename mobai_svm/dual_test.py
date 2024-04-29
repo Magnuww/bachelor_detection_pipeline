@@ -68,7 +68,7 @@ def train_svm_from_loader(data_loader, strSavingModelFilePath, param_str=None, o
 
 
 def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, feat_shapes,
-             strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2, ratio=0.5):
+                  strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2, ratio=0.5, plotname=""):
     test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='3_test_set', feat_shape=feat_shapes)
     test_loader2 = data_loader(strInputAttacksFeaturesFolders2, strInputBonafideFeaturesFolders2, flag='3_test_set', feat_shape=feat_shapes2)
     match_morphed1, match_bonafide1, match_morphed2, match_bonafide2 = test_loader.match_cross_dataset(test_loader2)
@@ -226,7 +226,7 @@ def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolder
     axs[1, 1].legend()
     axs[1, 2].legend()
 
-    fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics'+ str(ratio)+ '.png'))
+    fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics'+ plotname + str(ratio)+ '.png'))
 
 
 

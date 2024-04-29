@@ -10,6 +10,7 @@ parse.add_argument("--Mname", type=str, help="Path to save mobaimodels.")
 parse.add_argument("--Fname", type=str, help="Path to save facemodel.")
 parse.add_argument("--Train_models", type=bool, help="Train models.")
 parse.add_argument("--Tune_ratio", type=bool, help="Tune ratio")
+parse.add_argument("--plot_name", type=str, help="Name of the plot.", default="")
 
 args = parse.parse_args()
 
@@ -69,4 +70,4 @@ if __name__ == '__main__':
                 args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2)
         else:
             dual_test_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath,shape1, 
-                args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2, ratio=0.6)
+                          args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2, ratio=0.6,plotname=args.plot_name)
