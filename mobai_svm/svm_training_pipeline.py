@@ -1,11 +1,17 @@
-from libsvm_train_test import train_svm, test_svm, tune_svm
-from utils import getUserArgs
+from libsvm_train_test import train_svm, test_svm
+from argparse import ArgumentParser
+from utils import addUserArgs, addTrailingSlash
 
 
 if __name__ == "__main__":
-    strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput = (
-        getUserArgs()
-    )
+    parser = ArgumentParser()
+    parser = addUserArgs(parser)
+
+    args = parser.parse_args()
+
+    strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
+    strInputAttacksFeaturesFolders = addTrailingSlash(args.morphedAttackFeatures)
+    modelOutput = addTrailingSlash(args.modelOutput)
 
     param_strs = [
         ["-s 0 -t 0 -c 10 -b 1 -q", True],
