@@ -557,5 +557,5 @@ def test_svm(
     os.symlink(figSavePath, os.path.join(resultOutput, figName + ".png"))
 
     # save fig to pkl file
-    # with open("plot_metrics.pkl", "wb") as f:
-    #     pickle.dump(fig, f)
+    with open(os.path.join(resultOutput, figName + ".pkl"), "wb") as f:
+        pickle.dump(fig, f)
