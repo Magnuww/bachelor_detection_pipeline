@@ -76,8 +76,7 @@ def addTrailingSlash(path):
     return newPath
 
 
-def getUserArgs():
-    parser = ArgumentParser()
+def addUserArgs(parser):
     parser.add_argument(
         "--bonaFideFeatures",
         type=str,
@@ -101,9 +100,4 @@ def getUserArgs():
         default="./model_save/",
     )
 
-    args = parser.parse_args()
-
-    strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
-    strInputAttacksFeaturesFolders = addTrailingSlash(args.morphedAttackFeatures)
-    modelOutput = addTrailingSlash(args.modelOutput)
-    return strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, modelOutput
+    return parser
