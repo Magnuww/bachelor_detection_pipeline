@@ -1,6 +1,6 @@
 import os
-from utils import create_data_full
-from utils import create_full_mobai_traversal_array
+from dataset_utils import create_data_full
+from dataset_utils import create_full_mobai_traversal_array
 from argparse import ArgumentParser
 
 import random
@@ -42,6 +42,8 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
         original_path = os.path.join(original, path)
         output_path = os.path.join(output, path)
 
+        print(original_path)
+        print(output_path)
         if not os.path.exists(original_path):
             continue
 
@@ -49,18 +51,29 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
             os.makedirs(output_path)
 
         for file in os.listdir(original_path):
-            if random.uniform(0, 1) > probability:
+            print(file)
+            if "probe" in file:
+                new_filename = file
+                source = os.path.join(original_path, file)
+                destination = os.path.join(output_path, new_filename)
+                if os.path.exists(os.path.join(output_path, file)):
+                    continue
+                print("Symlinking from: " + source + ", to: " + destination)
+                os.symlink(source, destination)
+                continue
+
+            if random.uniform(0, 1) > probability: 
                 continue
 
             if os.path.exists(os.path.join(output_path, file)):
                 continue
-            if "probe" in file:
-                new_filename = file
             else:
                 new_filename = file.split(".")
                 new_filename = (
                     new_filename[0] + "_" + original_name + "." + new_filename[1]
                 )
+                #tmp hack
+                # new_filename = file
 
             source = os.path.join(original_path, file)
             destination = os.path.join(output_path, new_filename)
@@ -73,7 +86,10 @@ if __name__ == "__main__":
 
     traversal_array = create_full_mobai_traversal_array()
 
+    print(traversal_array)
     probability_for_each_dataset = 1 / len(datasets)
+    probability_for_each_dataset = 0.5
+    print(datasets)
     for dataset in datasets:
         symlink_dataset_balanced(
             dataset, output, traversal_array, probability_for_each_dataset

@@ -8,7 +8,7 @@ parse.add_argument("--Mfeatures", type=str, help="Path to Mobai features folder.
 parse.add_argument("--Ffeatures", type=str, help="Path to (Arc)Face features folder.")
 parse.add_argument("--Mname", type=str, help="Path to save mobaimodels.")
 parse.add_argument("--Fname", type=str, help="Path to save facemodel.")
-parse.add_argument("--Train_models", type=bool, help="Train models.")
+parse.add_argument("--Train_model", type=bool, help="Train models.")
 parse.add_argument("--Tune_ratio", type=bool, help="Tune ratio")
 parse.add_argument("--plot_name", type=str, help="Name of the plot.", default="")
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     ]
 
     shape1 = (49,512)
-    shape2 = (1,1024)
+    shape2 = (2,512)
     for i, param_i in enumerate(param_strs):
         print("Starting: " + param_i[0] + '_' + str(param_i[-1]))
         os_i = param_i[-1]
@@ -34,8 +34,8 @@ if __name__ == '__main__':
         strSavingModelFilePath = f'./PythonSVM/concatenate/model_{args.Mname}_os_{os_i}/'
         strSavingModelFilePath2 = f'./PythonSVM/concatenate/model_{args.Fname}_os_{os_i}/'
 
-        print("what" + str(args.Train_models))
-        if args.Train_models:
+        print("what" + str(args.Train_model))
+        if args.Train_model:
             # tune_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, "svm_tuning")
             StrInputBonafideFeaturesFolders = args.Mfeatures + "/" + strInputBonafideFeaturesFolders
             StrInputAttacksFeaturesFolders = args.Mfeatures + "/" + strInputAttacksFeaturesFolders
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         tune_ratio = True if args.Tune_ratio else False
         if tune_ratio:
             dual_tune_ratio(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, shape1,
-                args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2)
+                args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2, plotname=args.plot_name)
         else:
             dual_test_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath,shape1, 
                           args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2, ratio=0.6,plotname=args.plot_name)

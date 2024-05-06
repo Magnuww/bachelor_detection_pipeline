@@ -12,7 +12,7 @@ fi
 resultsPath="$1"
 
 if [[ -v resultsPath ]]; then
-  results=($resultsPath/**/plot_metrics.png)
+  results=($resultsPath/**/*.png)
 
   for result in "${results[@]}"
   do 

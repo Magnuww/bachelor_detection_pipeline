@@ -105,12 +105,14 @@ def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolder
     n_vals = p_vals.mean(0)
     n_vals2 = p_vals2.mean(0)
 
-    p_vals = np.array(n_vals) *(ratio) + np.array(n_vals2) *(1-ratio)
+    mobai = np.array(n_vals) *(ratio)
+    face = np.array(n_vals2) *(1-ratio)
+    #p_vals =
 
 
     #HACK TO CIRCUMVENT THE MEANS ALL OVER THE PLOTTING CODE.
-    p_vals = np.array([p_vals,p_vals])
-
+    #p_vals = np.array([p_vals,p_vals])
+    p_vals = np.array([2*mobai,2*face])
     pred_mean = preds.mean(0)
     pred_std  = preds.std(0)
     pred_mean_class = pred_mean.round()
@@ -168,6 +170,7 @@ def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolder
         preds_i = p_val_i.round()
         acc_i = 1 - np.abs(np.array(test_y) - preds_i).sum() / len(test_y)
         accs_ind.append(acc_i)
+        print(accs_ind)
     axs[0, 2].plot(np.arange(len(accs_ind)), accs_ind)
     axs[0, 2].plot([0, len(accs_ind) - 1], [acc_all, acc_all])
     axs[0, 2].set_title(f"Acc all {np.round(acc_all*100, 2)}")
@@ -226,18 +229,18 @@ def dual_test_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolder
     axs[1, 1].legend()
     axs[1, 2].legend()
 
-    fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics'+ plotname + str(ratio)+ '.png'))
+    fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics'+ plotname +"_"+ str(ratio)+ '.png'))
 
 
 
 
 
 def dual_tune_ratio(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, feat_shapes,
-             strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2):
+                    strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2, plotname=""):
 
 
-    test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='2_dev_set', feat_shape=feat_shapes)
-    test_loader2 = data_loader(strInputAttacksFeaturesFolders2, strInputBonafideFeaturesFolders2, flag='2_dev_set', feat_shape=feat_shapes2)
+    test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='3_test_set', feat_shape=feat_shapes)
+    test_loader2 = data_loader(strInputAttacksFeaturesFolders2, strInputBonafideFeaturesFolders2, flag='3_test_set', feat_shape=feat_shapes2)
     match_morphed1, match_bonafide1, match_morphed2, match_bonafide2 = test_loader.match_cross_dataset(test_loader2)
 
     test_loader.paths_morphed = match_morphed1
@@ -340,9 +343,12 @@ def dual_tune_ratio(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFold
         # Accuracies of individual predictors: 
         accs_ind = []
         acc_all = 1 - np.abs(np.array(test_y) - p_vals.mean(0).round()).sum() / len(test_y)
+        print("I <3 print debugging")
+        print(p_vals)
         for p_val_i in p_vals: 
             preds_i = p_val_i.round()
             acc_i = 1 - np.abs(np.array(test_y) - preds_i).sum() / len(test_y)
+            print(acc_i)
             accs_ind.append(acc_i)
         axs[0, 2].plot(np.arange(len(accs_ind)), accs_ind)
         axs[0, 2].plot([0, len(accs_ind) - 1], [acc_all, acc_all])
@@ -402,7 +408,7 @@ def dual_tune_ratio(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFold
         axs[1, 1].legend()
         axs[1, 2].legend()
 
-        fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics_tuning'+ str(round(ratio,2))+ '.png'))
+        fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics_tuning'+ plotname + "_" + str(round(ratio,2))+ '.png'))
     print("done")
     print(np.linspace(0,1,11))
     print(bpcer10)
