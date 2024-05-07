@@ -2,9 +2,9 @@ import os
 import shutil
 from typing import List
 
-results_path = "../results2/"
+results_path = "../results3/"
 
-test_sets_path = "../datasets/tests"
+test_sets_path = "../datasets/tests/"
 
 models_path = "../models/tests/"
 
@@ -30,29 +30,6 @@ def split_path(path) -> List[str]:
     # Reverse the list to get the directories in the correct order
     directories.reverse()
     return directories
-
-
-def copy_previous_results_from_models(models_path, new_results_parent_path):
-    for root, _, files in os.walk(models_path):
-        for name in files:
-            if name == RESULT_NAME:
-                previous_result_path = os.path.join(root, name)
-
-                root_split = split_path((root))
-                result_parent_name = os.path.join(
-                    root_split[-3], root_split[-2], root_split[-1]
-                )
-
-                print("copying: ", previous_result_path)
-
-                new_results_path = os.path.join(
-                    new_results_parent_path, result_parent_name
-                )
-
-                if not os.path.exists((new_results_path)):
-                    os.makedirs(new_results_path)
-
-                shutil.copy2(previous_result_path, new_results_path)
 
 
 if __name__ == "__main__":
