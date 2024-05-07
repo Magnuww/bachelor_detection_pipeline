@@ -49,7 +49,8 @@ if __name__ == "__main__":
     modelOutput = addTrailingSlash(args.modelOutput)
     if args.resultOutput is not None:
         resultOutput = addTrailingSlash(args.resultOutput)
-    resultOutput = None
+    else:
+        resultOutput = None
 
     param_strs = [
         ["-s 0 -t 0 -c 10 -b 1 -q", True],
