@@ -47,7 +47,9 @@ if __name__ == "__main__":
     strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
     strInputAttacksFeaturesFolders = addTrailingSlash(args.morphedAttackFeatures)
     modelOutput = addTrailingSlash(args.modelOutput)
-    resultOutput = addTrailingSlash(args.resultOutput)
+    if args.resultOutput is not None:
+        resultOutput = addTrailingSlash(args.resultOutput)
+    resultOutput = None
 
     param_strs = [
         ["-s 0 -t 0 -c 10 -b 1 -q", True],
