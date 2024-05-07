@@ -42,6 +42,14 @@ if __name__ == "__main__":
     parser = addUserArgs(parser)
     parser = addResultOutputArg(parser)
 
+    parser.add_argument(
+        "--loadPreds",
+        type=bool,
+        nargs="?",
+        help="Whether to load previous predictions",
+        default=False,
+    )
+
     args = parser.parse_args()
 
     strInputBonafideFeaturesFolders = addTrailingSlash(args.bonaFideFeatures)
@@ -51,6 +59,8 @@ if __name__ == "__main__":
         resultOutput = addTrailingSlash(args.resultOutput)
     else:
         resultOutput = None
+
+    loadPreds = args.loadPreds
 
     param_strs = [
         ["-s 0 -t 0 -c 10 -b 1 -q", True],
@@ -70,4 +80,5 @@ if __name__ == "__main__":
             strInputAttacksFeaturesFolders,
             strSavingModelFilePath,
             resultOutput=resultOutput,
+            load_preds=loadPreds,
         )
