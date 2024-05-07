@@ -34,12 +34,31 @@ class data_loader():
         newother = [other[i] for i in range(len(other)) if matchesother[i] == 1]
         print(len(newthis))
         print(len(newother))
-        print(newthis[50])
-        print(newother[50])
+        print(newthis[-1])
+        print(newother[-1])
+
+        #for i in range(len(newthis)):
+        #    idk1 = newthis[i][0].split("/")
+        #    idk2 = newother[i][0].split("/")
+        #    if "04207" in idk1[-1] or "04207" in idk2[-1]:
+        #        print(idk1)
+        #        print(idk2)
+        #   # if idk1 != idk2:
+           #     print("what")
+           #     print(idk1)
+           #     print(idk2)
+           #     print("tf")
+           # idk1 = newthis[i][1].split("/")[-4:]
+           # idk2 = newother[i][1].split("/")[-4:]
+           # if idk1 != idk2:
+           #     print("wtf")
+           #     print(idk1)
+           #     print(idk2)
+           #     print("wtf")
 
         return newthis, newother
 
-    def match_cross_dataset(self,other) -> (str, str, str, str):
+    def match_cross_dataset(self,other): 
         # print(self.paths_bonafide)
         bonafied_self, bonafied_other = self.find_match(self.paths_bonafide, other.paths_bonafide)
         morphed_self, morphed_other = self.find_match(self.paths_morphed, other.paths_morphed)
@@ -59,27 +78,17 @@ class data_loader():
                 morph_paths = os.path.join(self.morphed_path, ds_i, self.flag, folder_i)
                 for i, morph_path in enumerate(glob.glob(morph_paths + '/ref_*.txt')):
                     # Find the two probe images that can be combined with current morphed image: 
-                    # print(morph_path)
                     morph_name = os.path.split(morph_path)[-1]
                     probe_id1, probe_id2 = morph_name.replace('.', '_').split('_')[1:3]
                     probe_path1 = os.path.join(os.path.dirname(morph_path), "probe_" + probe_id1 + ".txt")
                     probe_path2 = os.path.join(os.path.dirname(morph_path), "probe_" + probe_id2 + ".txt")
 
-                    # print(probe_path1)
-                    # print(probe_path2)
-
                     if os.path.exists(probe_path1):
                         self.paths_morphed.append([probe_path1, morph_path])
-                    # else: 
-                        # print("missed")
 
                     if os.path.exists(probe_path2):    
-                        # print("hit")
                         self.paths_morphed.append([probe_path2, morph_path])
-                    # else:
-                        # print("missed2")
 
-        # print(self.paths_morphed)
         # Get bonafide paths
         for ds_i in data_sets: 
             for folder_i in self.sub_folders:
@@ -127,7 +136,6 @@ class data_loader():
             num_skipped = 0
             which_skipped = []
             for lab_i, ds_i in enumerate([self.paths_bonafide, self.paths_morphed]):
-                # print(lab_i)
                 for i, pair_path in enumerate(ds_i):
                     probe_i = readValuesFromFile(pair_path[0], print_flag=False)
                     ref_i = readValuesFromFile(pair_path[1], print_flag=False)
@@ -142,7 +150,6 @@ class data_loader():
                         which_skipped.append(pair_path[1])
                         continue
 
-                    # print(self.feat_shape)
                     probe_i = np.reshape(probe_i, self.feat_shape)
 
                     ref_i = np.reshape(ref_i, self.feat_shape)
@@ -168,8 +175,6 @@ class data_loader():
                     pickle.dump(meta_data, open(os.path.join(self.save_ds_path, "meta_" + self.flag + ".pkl"), 'wb'))
 
         print(f"Finished get data. Num samples: {len(y_full)}")
-        # print(np.shape(x_full))
-        # print(y_full)
         return x_full, y_full, meta_data
 
 
