@@ -433,7 +433,7 @@ def test_svm(
         [0, ten_perc[-1][0]],
         [ten_perc[0][0], ten_perc[0][0]],
         c="black",
-        label=f"BPCR: {np.round(one_perc[0][0]*100, 2)}% APCR: {np.round(one_perc[-1][0]*100, 2)}% eer: {np.round(eer*100, 2)}% ",
+        label=f"BPCR: {np.round(ten_perc[0][0]*100, 2)}% APCR: {np.round(ten_perc[-1][0]*100, 2)}% eer: {np.round(eer*100, 2)}% ",
     )
     axs[0, 0].loglog(
         [ten_perc[-1][0], ten_perc[-1][0]],
