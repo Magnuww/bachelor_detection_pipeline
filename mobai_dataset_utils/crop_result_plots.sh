@@ -11,7 +11,7 @@ fi
 
 resultsPath="$1"
 
-if [[ -v resultsPath ]]; then
+if [[ -v $resultsPath ]]; then
   results=($resultsPath/**/*.png)
 
   for result in "${results[@]}"
