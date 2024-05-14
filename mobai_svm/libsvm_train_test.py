@@ -458,6 +458,17 @@ def test_svm(
     axs[0, 0].legend()
     axs[0, 0].set_title("plot_apcr_bpcr.png")
 
+    det_plot_vars = {
+        "one_perc": one_perc,
+        "ten_perc": ten_perc,
+        "apcr": apcr,
+        "bpcr": bpcr,
+        "eer": eer,
+    }
+
+    with open(os.path.join(resultOutput, "det_plot_vars.pkl"), "wb") as file:
+        pickle.dump(det_plot_vars, file)
+
     # Accuracies for different thresholds
     accs_thres = []
     thres = np.arange(0.01, 1.0, 0.01)
