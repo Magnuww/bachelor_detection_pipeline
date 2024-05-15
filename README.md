@@ -1,5 +1,5 @@
 
-# Mobai svm
+# SVM classifier
 ## How to train with a new dataset 
 Step 1: 
 
