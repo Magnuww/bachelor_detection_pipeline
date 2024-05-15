@@ -30,7 +30,7 @@ def plot_det(det_plot_vars, fig, axs, model_name):
     bpcr = det_plot_vars["bpcr"]
     eer = det_plot_vars["eer"]
 
-    label = f"{model_name} eer: {np.round(eer*100, 2)}% "
+    label = f"{model_name} EER: {np.round(eer*100, 2)}% "
     axs.loglog(apcr, bpcr, label=label)
 
     return fig, axs
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         figName += folder
 
     x = np.logspace(-3, 0, 10)
-    axs.loglog(x, x, ls="--")
+    axs.loglog(x, x, ls="--", label="EER")
     axs.legend()
     axs.set_title("plot_apcr_bpcr")
     figName += ".png"
