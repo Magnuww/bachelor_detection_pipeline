@@ -17,7 +17,7 @@ python create_dataset.py \
 
 Step 2:
 
-Run the mobai svm with the dataset created in previous step. 
+Run the Svm with the dataset created in previous step. 
 
 Usage:
 ```bash
