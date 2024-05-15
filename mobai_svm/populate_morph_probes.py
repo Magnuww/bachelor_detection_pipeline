@@ -12,11 +12,9 @@ args = argparse.parse_args()
 for root, dirs, files in os.walk(args.morph):
     for file in files:
         #check if the file is in the list of files
-        #root print(file)
         print(file)
         prefix = file.split(".")
         imgs  = prefix[0].split("_")
-        # print(imgs)
         img1 = imgs[1]
         img2 = imgs[2]
 
@@ -39,7 +37,6 @@ for root, dirs, files in os.walk(args.morph):
         print(bonafiedpath1, path1)
         print(bonafiedpath2, path2)
         if path1:
-            # print(root)
             sh.copy(bonafiedpath1, newpath)
         if path2:
             sh.copy(bonafiedpath2, newpath2)
