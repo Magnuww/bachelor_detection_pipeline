@@ -37,6 +37,7 @@ def plot_det(det_plot_vars, fig, axs, model_name):
 
 
 if __name__ == "__main__":
+    plt.rcParams.update({"font.size": 20})
     parser = ArgumentParser()
     parser.add_argument(
         "--resultsPath",
