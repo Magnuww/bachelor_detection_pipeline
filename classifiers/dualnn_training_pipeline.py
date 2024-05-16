@@ -36,8 +36,8 @@ if __name__ == '__main__':
         str_i = param_i[0]
 
         strSavingModelFilePath = f'./PythonSVM/concatenate/model_{args.Mname}_os_{os_i}/'
-        strSavingModelFilePathnn = f'./magnusnn/concatenate/model_{args.Fname}_os_{os_i}/'
-        strSavingModelFilepathnn1 = f'./magnusnn/concatenate/model_{args.Mname}_os_{os_i}/'
+        strSavingModelFilePathnn = f'./nn/concatenate/model_{args.Fname}_os_{os_i}/'
+        strSavingModelFilepathnn1 = f'./nn/concatenate/model_{args.Mname}_os_{os_i}/'
         print("what" + str(args.Train_model))
         if args.Train_model:
             # tune_svm(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, "svm_tuning")

@@ -30,7 +30,7 @@ if __name__ == '__main__':
         os_i = param_i[-1]
         str_i = param_i[0]
 
-        strSavingModelFilePath = f'./magnusnn/concatenate/model_{args.Fname}_os_{os_i}/'
+        strSavingModelFilePath = f'./nn/concatenate/model_{args.Fname}_os_{os_i}/'
 
         print("what" + str(args.Train_model))
         if args.Train_model:
