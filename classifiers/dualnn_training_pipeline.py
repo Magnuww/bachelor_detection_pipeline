@@ -61,12 +61,6 @@ if __name__ == '__main__':
                 oversampled2=os_i,
                 feat_shapes2=shape2
                 )
-            # train_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, 
-            #         strSavingModelFilePath, param_str=str_i, oversampled=os_i, feat_shapes=(49,512))
-            # print("Finished training movai svm")
-            # train_svm(args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, 
-            #         strSavingModelFilePath2, param_str=str_i, oversampled=os_i, feat_shapes=(1,1024))
-            # print("Done Training")
         print("testing models")
         ratio= 0.5
         if args.Ratio:
@@ -75,7 +69,5 @@ if __name__ == '__main__':
         if tune_ratio:
             ratio = dualnn_tune_ratio(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, shape1,
                             args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePathnn,shape2, plotname=args.plot_name)
-        # ratio = dualnn_tune_ratio2(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilepathnn1, shape1,
-        #                 args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePathnn,shape2, plotname=args.plot_name)
-        dual_test_nn(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, shape1,
+         dual_test_nn(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, shape1,
                          args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePathnn,shape2, ratio = ratio, plotname=args.plot_name)

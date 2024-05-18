@@ -46,17 +46,4 @@ if __name__ == '__main__':
                 oversampled=os_i, 
                 feat_shapes=shape1,
                 )
-            # train_svm(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, 
-            #         strSavingModelFilePath, param_str=str_i, oversampled=os_i, feat_shapes=(49,512))
-            # print("Finished training movai svm")
-            # train_svm(args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, 
-            #         strSavingModelFilePath2, param_str=str_i, oversampled=os_i, feat_shapes=(1,1024))
-            # print("Done Training")
-        # print("testing models")
-        # tune_ratio = True if args.Tune_ratio else False
-        # if tune_ratio:
-        #     dual_tune_ratio(args.Mfeatures + "/" + strInputBonafideFeaturesFolders, args.Mfeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath, shape1,
-        #         args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath2,shape2, plotname=args.plot_name)
-        # else:
         test_nn(args.Ffeatures + "/" + strInputBonafideFeaturesFolders, args.Ffeatures + "/" + strInputAttacksFeaturesFolders, strSavingModelFilePath,shape1,plotname=args.plot_name)
-        # print("HEI")

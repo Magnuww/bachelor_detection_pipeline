@@ -16,15 +16,11 @@ def train_nn(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, st
 def train_nn_from_loader(data_loader, strSavingModelFilePath, feat_shape, param_str=None, oversampled=False ):
     if not os.path.exists(strSavingModelFilePath):
         os.makedirs(strSavingModelFilePath)
-
+    #Load data
     train_loader = data_loader
     train_x, train_y, _ = train_loader.get_full_data(save_flag=False, load_from_file=False)      # x=[49xNx512], y=[N,]
-    # print(train_y)
-
     # Check if the training should oversample the bonafide samples to ensure class balance.
     #   Note: Currently only works for num BF < num Morph and num Morph < 2 * num BF. This would
-    #
-    #   be easy to change if the data is different...
     if oversampled: 
         np.random.seed(666)
         bf_indxs = np.where(np.array(train_y) != 1)[0]
@@ -33,8 +29,6 @@ def train_nn_from_loader(data_loader, strSavingModelFilePath, feat_shape, param_
         print(mp_indxs)
         print(f"len mp {len(mp_indxs)}")
         print(f"len bf {len(bf_indxs)}")
-
-
         # print(len(bf_indxs), len(mp_indxs))
         bf_indxs = np.sort(np.concatenate([bf_indxs, np.random.choice(bf_indxs, len(mp_indxs) - len(bf_indxs), replace=False)]))
         os_indxs = np.concatenate([bf_indxs, mp_indxs])
@@ -44,69 +38,47 @@ def train_nn_from_loader(data_loader, strSavingModelFilePath, feat_shape, param_
         print(f"Oversampled Size {len(train_y)}, num_morph {np.sum(np.array(train_y) == 1)}")
     else: 
         print(f"Data Size {len(train_y)}, num_morph {np.sum(np.array(train_y) == 2)}")
-
+    #Define the model
     model = tf.keras.Sequential([
     tf.keras.layers.Dense(512, activation='relu', input_shape=(feat_shape[1],)),
     tf.keras.layers.Dense(256, activation='relu'),
     tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Dense(1, activation='sigmoid')
     ])
-
+    #Compile the model
     model.compile(optimizer='adam',
           loss='binary_crossentropy',
           metrics=['accuracy'])
-    print(len(train_x))
-    print(len(train_x[0]))
-    print(len(train_x[0][0]))
-    print(len(train_y))
     train_x = np.array(train_x[0])
     # train_x = np.expand_dims(train_x, axis=0)
-    print(train_x.shape)
     train_y = np.array(train_y)
-    # return
-    # Summary of the model
     print("starting fitting of model")
+    #Train the model
     model.fit(train_x, train_y, epochs=10, batch_size=32, verbose=2)
     print("finished fitting of model")
+    #save the model
     model.save(strSavingModelFilePath + 'model.keras')
-    # Train the SVM model
 
 
 def test_nn(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, feat_shapes,
                   plotname=""):
-    test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='3_test_set', feat_shape=feat_shapes)
 
+    #Create dataloader
+    test_loader = data_loader(strInputAttacksFeaturesFolders, strInputBonafideFeaturesFolders, flag='3_test_set', feat_shape=feat_shapes)
+    #Load data
     test_x, test_y, meta_data = test_loader.get_full_data(save_flag=False, load_from_file=False,)      # x=[49xNx512], y=[N,]
-    print(len(test_y))
     test_x = np.array(test_x[0])
     preds = []
     p_vals = []
-    # for i, x_i in enumerate(test_x):
-    #     print("Starting Loop " + str(i))
-    #     model_i = svmutil.svm_load_model(strSavingModelFilePath + 'model_' + str(i) + '.model')
-    #     _, _, p_val_i = svmutil.svm_predict(test_y, x_i, model_i, '-b 1 -q')
-    #     # preds.append(pred_i)
-    #     p_vals.append(np.array(p_val_i)[:, 1].flatten().tolist())
-
+    #Load model
     model = tf.keras.models.load_model(strSavingModelFilePath + 'model.keras')
+    #Get test scores
     p_vals = model.predict(test_x)
-    
-    # print(p_vals.shape)
-    # print(p_vals[0])
-    # print(p_vals[1:10])
-    # print(p_vals[-1])
+
+    #hack to circumvent means in plotting code
     p_vals = [p_vals,p_vals]
     
     p_vals = np.array(p_vals)
-    print(p_vals.mean(0))
-    #np.savetxt(os.path.join(strSavingModelFilePath, 'pred_test.txt'), preds,fmt='%i')
-    #np.savetxt(os.path.join(strSavingModelFilePath, 'p_vals_test.txt'), p_vals)
-    #np.savetxt(os.path.join(strSavingModelFilePath, 'pred_mean_test.txt'), pred_mean, delimiter="\n")
-    #np.savetxt(os.path.join(strSavingModelFilePath, 'pred_std_test.txt'), pred_std, delimiter="\n")
-    #np.savetxt(os.path.join(strSavingModelFilePath, 'pred_mean_class_test.txt'), pred_mean_class.astype(int), fmt='%i', delimiter="\n")
-    #with open(os.path.join(strSavingModelFilePath, 'acc.txt'), "w") as f:
-    #    f.write(f"Accuracy Test: {acc}")
-
 
     # Get evaluation metrics and plot: 
     fig, axs = plt.subplots(2, 4, figsize=(30, 10))
@@ -135,13 +107,7 @@ def test_nn(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, str
 
         preds_i = (p_vals.mean(0) > t_i).astype(int)
         test_y = np.array(test_y).reshape(-1,1)
-        # print(preds_i.shape)
-        # print(test_y.shape)
-        # print(np.array(test_y) - preds_i)
         acc_i = 1 - np.abs(np.array(test_y) - preds_i).sum() / len(test_y)
-        # print(np.abs(np.array(test_y) - preds_i).sum())
-        # print(len(test_y))
-        # print(np.abs(np.array(test_y) - preds_i).sum() / len(test_y))
         accs_thres.append(acc_i)
         if t_i == 0.5: 
             acc_mid = acc_i
