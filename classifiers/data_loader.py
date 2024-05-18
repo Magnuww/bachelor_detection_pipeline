@@ -18,11 +18,11 @@ class data_loader():
         # Construct the paths to construct dataset
         if construct:
             self.construct_pipeline()
-
+    #Finds matching data between to lists
     def find_match(self,this,other):
         print(f'DB1: {len(this)}')
         print(f'DB2: {len(other)}')
-        ##remove uneccesary info for the comparison
+        #remove uneccesary info for the comparison
         thisunp = [[x[0].split("/")[-4:], x[1].split("/")[-4:]] for x in this]
         otherunp = [[x[0].split("/")[-4:], x[1].split("/")[-4:]] for x in other]
         #lists of matching indices of the elements that match
@@ -32,32 +32,9 @@ class data_loader():
         #new lists with only the elements that match but containing the full path
         newthis = [this[i] for i in range(len(this)) if matchesthis[i] == 1]
         newother = [other[i] for i in range(len(other)) if matchesother[i] == 1]
-        print(len(newthis))
-        print(len(newother))
-        print(newthis[-1])
-        print(newother[-1])
-
-        #for i in range(len(newthis)):
-        #    idk1 = newthis[i][0].split("/")
-        #    idk2 = newother[i][0].split("/")
-        #    if "04207" in idk1[-1] or "04207" in idk2[-1]:
-        #        print(idk1)
-        #        print(idk2)
-        #   # if idk1 != idk2:
-           #     print("what")
-           #     print(idk1)
-           #     print(idk2)
-           #     print("tf")
-           # idk1 = newthis[i][1].split("/")[-4:]
-           # idk2 = newother[i][1].split("/")[-4:]
-           # if idk1 != idk2:
-           #     print("wtf")
-           #     print(idk1)
-           #     print(idk2)
-           #     print("wtf")
-
         return newthis, newother
 
+    #Compares two dataloaders
     def match_cross_dataset(self,other): 
         # print(self.paths_bonafide)
         bonafied_self, bonafied_other = self.find_match(self.paths_bonafide, other.paths_bonafide)

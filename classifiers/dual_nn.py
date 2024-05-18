@@ -279,7 +279,10 @@ def dualnn_tune_ratio(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFo
     mineer = min(eers)
     optimal_brute = eers.index(mineer)/100
     print(f"Optimal brute weight {optimal_brute} eer: {mineer}")
-    # return optimal_brute
+    return optimal_brute
+    
+    
+    """
     for ratio in np.linspace(0,1,11):
         p_vals = np.array(n_vals) *(ratio) + np.array(n_vals2) *(1-ratio)
         # p_vals = np.array(n_vals) + np.array(n_vals2)
@@ -395,23 +398,7 @@ def dualnn_tune_ratio(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFo
             acc_i = 1 - np.abs(np.array(test_i) - p_vals_i.mean(0).round()).sum() / len(test_i)
             apcr_i, bpcr_i, _ ,_= plot_APCER_BPCER(p_vals_i, np.array(test_i), step=0.01, label=ds, plot_flag=False)
             axs[1, 1].loglog(apcr_i, bpcr_i, label=f"{ds} - {np.round(acc_i*100, 2)}%")
-            accs_thres = []
-            for t_i in thres: 
-                preds_i = (p_vals_i.mean(0) > t_i).astype(int)
-                acc_i = 1 - np.abs(np.array(test_i) - preds_i).sum() / len(test_i)
-                accs_thres.append(acc_i)
-                if t_i == 0.5: 
-                    acc_mid = acc_i
-                    axs[1, 2].plot([0, 0.5], [acc_i, acc_i], c='black', ls='--')
-            axs[1, 2].plot(thres, accs_thres, label=f"{ds} - {np.round(acc_mid*100, 2)}% - {np.round(max(accs_thres)*100, 2)}%")
-        axs[1, 1].legend()
-        axs[1, 2].legend()
-
-        fig.savefig(os.path.join(strSavingModelFilePath, 'plot_metrics_tuning'+ plotname + "_" + str(round(ratio,2))+ '.png'))
-    print("done")
-    print(np.linspace(0,1,11))
-    print(bpcer10)
-    print(bpcer1)
+            accs_thres 
 
 def dualnn_tune_ratio2(strInputBonafideFeaturesFolders, strInputAttacksFeaturesFolders, strSavingModelFilePath, feat_shapes,
                     strInputBonafideFeaturesFolders2, strInputAttacksFeaturesFolders2, strSavingModelFilePath2,feat_shapes2, plotname=""):
@@ -488,7 +475,7 @@ def dualnn_tune_ratio2(strInputBonafideFeaturesFolders, strInputAttacksFeaturesF
     mineer = min(eers)
     optimal_brute = eers.index(mineer)/100
     print(f"Optimal brute weight {optimal_brute} eer: {mineer}")
-    # return optimal_static_weight
+    return optimal_static_weight
     for ratio in np.linspace(0,1,11):
         p_vals = np.array(n_vals) *(ratio) + np.array(n_vals2) *(1-ratio)
         # p_vals = np.array(n_vals) + np.array(n_vals2)
@@ -625,3 +612,4 @@ def dualnn_tune_ratio2(strInputBonafideFeaturesFolders, strInputAttacksFeaturesF
     print(bpcer10)
     print(bpcer1)
 
+"""
