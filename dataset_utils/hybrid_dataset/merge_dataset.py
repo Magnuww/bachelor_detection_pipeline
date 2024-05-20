@@ -42,8 +42,6 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
         original_path = os.path.join(original, path)
         output_path = os.path.join(output, path)
 
-        print(original_path)
-        print(output_path)
         if not os.path.exists(original_path):
             continue
 
@@ -51,7 +49,6 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
             os.makedirs(output_path)
 
         for file in os.listdir(original_path):
-            print(file)
             if "probe" in file:
                 new_filename = file
                 source = os.path.join(original_path, file)
@@ -62,7 +59,7 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
                 os.symlink(source, destination)
                 continue
 
-            if random.uniform(0, 1) > probability: 
+            if random.uniform(0, 1) > probability:
                 continue
 
             if os.path.exists(os.path.join(output_path, file)):
@@ -72,7 +69,7 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
                 new_filename = (
                     new_filename[0] + "_" + original_name + "." + new_filename[1]
                 )
-                #tmp hack
+                # tmp hack
                 # new_filename = file
 
             source = os.path.join(original_path, file)
