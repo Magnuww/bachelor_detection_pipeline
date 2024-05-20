@@ -1,5 +1,4 @@
 import os
-import sys
 import numpy as np
 from argparse import ArgumentParser
 import re
@@ -41,7 +40,6 @@ def format_name(root: str, file: str, morphalg: str) -> str:
             case "AGE" | "FERET":
                 print(file)
                 match = mordiff_age_feret_rename.match(file)
-    # print(database)
     elif morphalg.lower() == "ubo":
         match database:
             case "FERET":
@@ -54,21 +52,17 @@ def format_name(root: str, file: str, morphalg: str) -> str:
                 match = age_rename.match(file)
     if match == "" or match is None:
         raise ValueError("No match found")
-    # print(file)
-    # print(match.groups())
     new_name = "ref_{}_{}.txt".format(*match.groups())
 
     return new_name
 
 
 def traverse(path, out: str, rename=False, morphalg=None):
-    for root, dirs, files in os.walk(path):
-        # print(root, dirs, files)
+    for root, _, files in os.walk(path):
         for file in files:
             if file.endswith(".txt"):
                 path = root.split("/")
                 outpath = out + "/" + "/".join(path[-5:]) + "/"
-                # print(outpath)
                 if not os.path.exists(outpath):
                     os.makedirs(outpath)
 
@@ -95,24 +89,3 @@ if __name__ == "__main__":
         traverse(args.path, args.out, True, morphalg=args.morphalg)
     else:
         traverse(args.path, args.out)
-
-        # os.system("python3 feature_extraction/extract_emb.py ")
-    # iterate over image paths in both folders
-
-    # opens the morph file and passes the corresponding images to the morph two images.py script.
-    #    with open(pathmorph, "r") as file:
-    #        lines = file.readlines()
-    #        for line in lines:
-    #
-    #            img1, img2 = line.split()
-    #            print(img1, img2)
-    #            os.system(f"python3 morph_two_images.py --img1 {pathimages + img1} --img2 {pathimages + img2} --out {args.out}")
-
-    """
-    img1_folder = os.listdir(path1)
-    img2_folder = os.listdir(path2)
-    print(path1)
-    print(img1_folder)
-    for image1, image2 in zip(img1_folder, img2_folder):
-        os.system(f"python3 morph_two_images.py --img1 {path1 + image1} --img2 {path2 + image2} --out {args.out}")
-    """

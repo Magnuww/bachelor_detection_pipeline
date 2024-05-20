@@ -69,8 +69,6 @@ def symlink_dataset_balanced(original, output, traversal_array, probability):
                 new_filename = (
                     new_filename[0] + "_" + original_name + "." + new_filename[1]
                 )
-                # tmp hack
-                # new_filename = file
 
             source = os.path.join(original_path, file)
             destination = os.path.join(output_path, new_filename)

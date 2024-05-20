@@ -32,7 +32,6 @@ if __name__ == "__main__":
             if database_gender_name in allFileNames and (name != ""):
                 fileNameLeakage.append(database_gender_name)
             else:
-                # print(gender_name)
                 allFileNames.append(database_gender_name)
 
     if len(fileNameLeakage) == 0:
@@ -40,4 +39,3 @@ if __name__ == "__main__":
     else:
         print("Leakage found")
         print(fileNameLeakage)
-
