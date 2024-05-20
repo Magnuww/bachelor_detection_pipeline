@@ -3,32 +3,31 @@ This repository contains code and scripts for the bachelor thesis "Detect manipu
 part will contain various utility scripts for preprocessing, and modifying data.
 
 ## Directory structure of repository
-This repository has 4 main directories: classifiers, dataset_utils, multiple_feature_shapes
-and morph_utils
-
-
-### Classifiers
+```bash
+.
+├── classifiers
+├── dataset_utils
+├── MobaiSVM
+├── morph_utils
+└── multiple_feature_shapes
+```
+This repository has 5 main directories: classifiers, dataset_utils, MobaiSVM, morph_utils and multiple_feature_shapes 
 Classifiers is the directory for the different training, testing code for 
-classifiers used in the thesis.
-
-Like the modified SVM from MOBAI AS, dualsvm, dual neural network and the neural network.
-
-This directory has an additional README.md for how to train and test.
-
-### dataset_utils
+classifiers modified and used in the thesis.
 
 The datset_utils folder is for utilities and scripts used for preparing dataset.
 This directory includes files like renaming scripts and dataset validation scripts.
 
-### multiple_feat_shapes 
-
-### morph utils
+The MobaiSVM directory is the original SVM received from MOBAI AS, this is 
+whats been used as a base for the modified classifiers in the classifiers directory.
 
 The morph utils directory contains various scripts used to make the 
 morphing algorithms run with the desired format.
 
+The multiple_feature_shapes directory is for code used to figure out the best 
+featureshape.
 
-## Using the modified SVM classifier 
+## Example usecases for modified SVM classifier 
 
 ### How to train with a new dataset 
 Step 1: 
