@@ -1,9 +1,12 @@
-# Directory structure of repository
-This repository has 4 main directories: classifiers, dataset_utils and 
-multiple_feat_shapes. 
+This repository contains code and scripts for the bachelor thesis "Detect manipulated face Images using deep learning tools". This repository will mostly contain code for training and testing for the different models in the thesis. The other 
+part will contain various utility scripts for preprocessing, and modifying data.
+
+## Directory structure of repository
+This repository has 4 main directories: classifiers, dataset_utils, multiple_feat_shapes
+and morph_utils
 
 
-## Classifiers
+### Classifiers
 Classifiers is the directory for the different training, testing code for 
 classifiers used in the thesis.
 
@@ -11,16 +14,22 @@ Like the modified SVM from MOBAI AS, dualsvm, dual neural network and the neural
 
 This directory has an additional README.md for how to train and test.
 
-## dataset_utils
+### dataset_utils
 
 The datset_utils folder is for utilities and scripts used for preparing dataset.
 This directory includes files like renaming scripts and dataset validation scripts.
 
-## multiple_feat_shapes 
+### multiple_feat_shapes 
 
-# Using the modified SVM classifier 
+### morph utils
 
-## How to train with a new dataset 
+The morph utils directory contains various scripts used to make the 
+morphing algorithms run with the desired format.
+
+
+## Using the modified SVM classifier 
+
+### How to train with a new dataset 
 Step 1: 
 
 Run create_dataset.py in mobai_dataset_utils:
@@ -57,7 +66,7 @@ trash **/.DS_store
 ```
 
 
-## How to test with another dataset 
+### How to test with another dataset 
 
 Step 1: 
 
@@ -74,7 +83,7 @@ python3 svm_testing_pipeline.py --bonaFideFeatures unibo/Feature_Bonafide \
 ```
 
 
-## How to merge/combine datasets
+### How to merge/combine datasets
 
 <!-- These instructions are for merging 2 or more datasets, whilst keeping the size -->
 <!-- proportional.  -->
@@ -119,3 +128,21 @@ Example usage:
 python combine_dataset.py --datasets UNIBO MORDIFF MIPGAN --ouput COMBINED
 ```
 
+## Citations
+
+### mordiff
+
+This repository has utilities and code for running among other things the MORDIFF morphing algorithm.
+
+The github repository for mordiff: [mordiff](https://github.com/naserdamer/MorDIFF)
+
+MORDIFF paper: [mordiff_paper](https://arxiv.org/abs/2302.01843)
+
+Mordiff SYN-mad benchmark: [syn-mad](https://doi.org/10.1109/IJCB54206.2022.10007950)
+
+### MIPGAN
+
+
+This repository has utilities and code for running among other things the MIPGAN morphing algorithm.
+
+Mipgan github repository: [mipgan](https://github.com/ZHYYYYYYYYYYYY/MIPGAN-face-morphing-algorithm)
