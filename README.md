@@ -1,5 +1,25 @@
+# Directory structure of repository
+This repository has 4 main directories: classifiers, dataset_utils and 
+multiple_feat_shapes. 
 
-# SVM classifier
+
+## Classifiers
+Classifiers is the directory for the different training, testing code for 
+classifiers used in the thesis.
+
+Like the modified SVM from MOBAI AS, dualsvm, dual neural network and the neural network.
+
+This directory has an additional README.md for how to train and test.
+
+## dataset_utils
+
+The datset_utils folder is for utilities and scripts used for preparing dataset.
+This directory includes files like renaming scripts and dataset validation scripts.
+
+## multiple_feat_shapes 
+
+# Using the modified SVM classifier 
+
 ## How to train with a new dataset 
 Step 1: 
 
@@ -98,8 +118,4 @@ Example usage:
 ```bash
 python combine_dataset.py --datasets UNIBO MORDIFF MIPGAN --ouput COMBINED
 ```
-
-
-
-
 
