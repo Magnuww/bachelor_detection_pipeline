@@ -44,4 +44,3 @@ dependencies:
       - six==1.16.0
       - threadpoolctl==3.2.0
       - tzdata==2024.1
-prefix: /home/Dan/anaconda3/envs/python-svm
