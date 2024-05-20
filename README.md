@@ -6,7 +6,7 @@ It is to be noted that the code in this repository is created for the purpose of
 achieving results quick and fast.
 
 ## Directory structure of repository
-This repository has 4 main directories: classifiers, dataset_utils, multiple_feat_shapes
+This repository has 4 main directories: classifiers, dataset_utils, multiple_feature_shapes
 and morph_utils
 
 
