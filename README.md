@@ -1,5 +1,9 @@
+# Code repository for bachelor thesis 
 This repository contains code and scripts for the bachelor thesis "Detect manipulated face Images using deep learning tools". This repository will mostly contain code for training and testing for the different models in the thesis. The other 
 part will contain various utility scripts for preprocessing, and modifying data.
+
+It is to be noted that the code in this repository is created for the purpose of
+achieving results quick and fast.
 
 ## Directory structure of repository
 This repository has 4 main directories: classifiers, dataset_utils, multiple_feat_shapes
