@@ -1,6 +1,6 @@
 import os
-from dataset_utils import create_data_full
-from dataset_utils import create_full_mobai_traversal_array
+from ..dataset_utils import create_data_full
+from ..dataset_utils import create_full_mobai_traversal_array
 from argparse import ArgumentParser
 
 import random

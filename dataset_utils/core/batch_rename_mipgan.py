@@ -4,7 +4,7 @@ import numpy as np
 from argparse import ArgumentParser
 import re
 import shutil
-from dataset_utils import build_traversal_array
+from ..dataset_utils import build_traversal_array
 
 # Different regex for different databases naming conventions
 tuf_rename = re.compile(r"M_(\d+)_(\d+).*")
