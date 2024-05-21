@@ -22,7 +22,4 @@ hybrid model.
 result_plots are utilities for formatting of the results and plots.
 Scripts in this folder can for example combine several plots into one figure.
 
-
-
-
-
+Validation directory contains files that verifies the dataset
